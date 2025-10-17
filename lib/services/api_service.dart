@@ -6,7 +6,7 @@ import '../model/data_kampus.dart';
 
 
 class ApiService {
-  static const String baseUrl = 'http://192.168.43.245:8000/api/kampus';
+  static const String baseUrl = 'http://192.168.111.99:8000/api/kampus';
 
   static Future<List<DataKampus>> fetchAll() async {
     final response = await http.get(Uri.parse(baseUrl));

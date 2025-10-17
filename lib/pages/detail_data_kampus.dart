@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';  // Untuk font yang lebih cantik
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../model/data_kampus.dart';
 import '../services/api_service.dart';
@@ -24,31 +25,48 @@ class _DetailDataKampusPageState extends State<DetailDataKampusPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.grey.shade100,  // Latar belakang lebih lembut
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
-        title: const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Detail Kampus',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+        backgroundColor: Colors.teal.shade600,  // Warna AppBar lebih menarik dan konsisten
+        elevation: 4,
+        title: Text(
+          'Detail Kampus',
+          style: GoogleFonts.poppins(  // Gunakan font Poppins
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
           ),
         ),
       ),
-
       body: FutureBuilder<DataKampus>(
         future: _kampusDetail,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.teal,  // Warna loader yang sesuai dengan tema
+              ),
+            );
           } else if (snapshot.hasError) {
-            return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
+            return Center(
+              child: Text(
+                'Terjadi kesalahan: ${snapshot.error}',
+                style: GoogleFonts.poppins(
+                  color: Colors.red.shade700,
+                  fontSize: 16,
+                ),
+              ),
+            );
           } else if (!snapshot.hasData) {
-            return const Center(child: Text('Data tidak ditemukan'));
+            return Center(
+              child: Text(
+                'Data tidak ditemukan',
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            );
           } else {
             final kampus = snapshot.data!;
             final lokasi = LatLng(kampus.latitude, kampus.longitude);
@@ -59,61 +77,83 @@ class _DetailDataKampusPageState extends State<DetailDataKampusPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    elevation: 4,
+                    elevation: 6,  // Bayangan lebih tebal untuk efek 3D
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Text(
-                              kampus.nama,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.lightBlue,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.lightBlue.shade100, Colors.white],  // Gradient untuk latar belakang cantik
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Text(
+                                kampus.nama,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.teal.shade700,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          _infoRow(Icons.location_on, "Alamat: ${kampus.alamat}", Colors.red),
-                          _infoRow(Icons.phone, "Telp: ${kampus.telpon}", Colors.green),
-                          _infoRow(Icons.category, "Kategori: ${kampus.kategori}", Colors.orange),
-                          _infoRow(Icons.school, "Jurusan: ${kampus.jurusan}", Colors.black),
-                          _infoRow(Icons.map, "Latitude: ${kampus.latitude}", Colors.blue),
-                          _infoRow(Icons.map_outlined, "Longitude: ${kampus.longitude}", Colors.blue),
-                        ],
+                            const SizedBox(height: 16),
+                            _infoRow(Icons.location_on, "Alamat: ${kampus.alamat}", Colors.red.shade700),
+                            _infoRow(Icons.phone, "Telp: ${kampus.telpon}", Colors.green.shade700),
+                            _infoRow(Icons.category, "Kategori: ${kampus.kategori}", Colors.orange.shade700),
+                            _infoRow(Icons.school, "Jurusan: ${kampus.jurusan}", Colors.black),
+                            _infoRow(Icons.map, "Latitude: ${kampus.latitude}", Colors.blue.shade700),
+                            _infoRow(Icons.map_outlined, "Longitude: ${kampus.longitude}", Colors.blue.shade700),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'Lokasi Kampus di Peta:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.teal.shade700,
+                    ),
                   ),
                   const SizedBox(height: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: SizedBox(
-                      height: 250,
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target: lokasi,
-                          zoom: 15,
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: SizedBox(
+                        height: 250,
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: lokasi,
+                            zoom: 15,
+                          ),
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId('lokasi_kampus'),
+                              position: lokasi,
+                              infoWindow: InfoWindow(title: kampus.nama),
+                            )
+                          },
+                          myLocationEnabled: false,
+                          zoomControlsEnabled: true,
+                          mapType: MapType.normal,
                         ),
-                        markers: {
-                          Marker(
-                            markerId: const MarkerId('lokasi_kampus'),
-                            position: lokasi,
-                            infoWindow: InfoWindow(title: kampus.nama),
-                          )
-                        },
-                        myLocationEnabled: false,
-                        zoomControlsEnabled: true,
-                        mapType: MapType.normal,
                       ),
                     ),
                   ),
@@ -128,16 +168,19 @@ class _DetailDataKampusPageState extends State<DetailDataKampusPage> {
 
   Widget _infoRow(IconData icon, String text, Color iconColor) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: iconColor),
-          const SizedBox(width: 10),
+          Icon(icon, size: 22, color: iconColor),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 15),
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                color: Colors.black87,
+              ),
             ),
           ),
         ],

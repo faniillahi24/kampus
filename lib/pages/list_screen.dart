@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';  // Import untuk font yang lebih cantik
 import '../model/data_kampus.dart';
 import '../services/api_service.dart';
 import 'tambah_data_kampus.dart';
 import 'edit_data_kampus.dart';
-import 'detail_data_kampus.dart'; // ⬅️ Tambahkan import detail page
+import 'detail_data_kampus.dart';
 
 class ListDataKampusPage extends StatefulWidget {
   const ListDataKampusPage({Key? key}) : super(key: key);
@@ -54,71 +55,86 @@ class _ListDataKampusPageState extends State<ListDataKampusPage> {
 
   Widget _buildCard(DataKampus kampus) {
     return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.teal.shade100,
-              radius: 28,
-              child: const Icon(Icons.account_balance, color: Colors.lightBlue, size: 30),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailDataKampusPage(id: kampus.id!),
-                    ),
-                  );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      kampus.nama,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    _infoRow(Icons.location_on, "Alamat: ${kampus.alamat}", Colors.red),
-                    _infoRow(Icons.phone, "Telp: ${kampus.telpon}", Colors.green),
-                    _infoRow(Icons.category, "Kategori: ${kampus.kategori}", Colors.orange),
-                  ],
-                ),
+      elevation: 6,  // Bayangan lebih tebal untuk efek 3D
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),  // Border lebih halus
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.lightBlue.shade100, Colors.white],  // Gradient untuk latar belakang yang cantik
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.teal.shade200,  // Warna lebih lembut
+                radius: 30,
+                child: const Icon(Icons.account_balance, color: Colors.teal, size: 32),
               ),
-            ),
-            const SizedBox(width: 8),
-            Column(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.blue),
-                  tooltip: 'Edit',
-                  onPressed: () {
+              const SizedBox(width: 16),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditDataKampusPage(data: kampus),
+                        builder: (context) => DetailDataKampusPage(id: kampus.id!),
                       ),
-                    ).then((_) => _refresh());
+                    );
                   },
+                  splashColor: Colors.lightBlue.shade200,  // Efek splash yang lebih cantik
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        kampus.nama,
+                        style: GoogleFonts.poppins(  // Gunakan font Poppins untuk tampilan modern
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.teal.shade700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _infoRow(Icons.location_on, "Alamat: ${kampus.alamat}", Colors.red.shade700),
+                      _infoRow(Icons.phone, "Telp: ${kampus.telpon}", Colors.green.shade700),
+                      _infoRow(Icons.category, "Kategori: ${kampus.kategori}", Colors.orange.shade700),
+                    ],
+                  ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  tooltip: 'Hapus',
-                  onPressed: () => _confirmDelete(kampus.id!),
-                ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(width: 8),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.blue, size: 24),
+                    tooltip: 'Edit',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditDataKampusPage(data: kampus),
+                        ),
+                      ).then((_) => _refresh());
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete, color:Colors.red, size: 24),
+                    tooltip: 'Hapus',
+                    onPressed: () => _confirmDelete(kampus.id!),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -127,18 +143,17 @@ class _ListDataKampusPageState extends State<ListDataKampusPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,  // Latar belakang halaman lebih lembut
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
-        elevation: 2,
-        title: const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Data Kampus',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+        backgroundColor: Colors.teal.shade600,  // Warna AppBar lebih menarik
+        elevation: 4,
+        title: const Text(
+          'Data Kampus',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            fontFamily: 'Poppins',  // Gunakan font yang sama untuk konsistensi
           ),
         ),
       ),
@@ -146,16 +161,31 @@ class _ListDataKampusPageState extends State<ListDataKampusPage> {
         future: _kampusList,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.teal,  // Warna loader lebih sesuai
+              ),
+            );
           } else if (snapshot.hasError) {
-            return Center(child: Text('Terjadi Kesalahan: ${snapshot.error}'));
+            return Center(
+              child: Text(
+                'Terjadi Kesalahan: ${snapshot.error}',
+                style: GoogleFonts.poppins(color: Colors.red.shade700),
+              ),
+            );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Belum ada data kampus'));
+            return Center(
+              child: Text(
+                'Belum ada data kampus',
+                style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey.shade600),
+              ),
+            );
           } else {
             return RefreshIndicator(
               onRefresh: () async => _refresh(),
+              color: Colors.teal,  // Warna refresh indicator
               child: ListView.builder(
-                padding: const EdgeInsets.only(bottom: 80),
+                padding: const EdgeInsets.all(16),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   return _buildCard(snapshot.data![index]);
@@ -166,11 +196,11 @@ class _ListDataKampusPageState extends State<ListDataKampusPage> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.teal.shade600,  // Warna yang lebih serasi
         icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text(
+        label: Text(
           'Tambah Data',
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.poppins(color: Colors.white, fontSize: 16),
         ),
         onPressed: () async {
           await Navigator.push(
@@ -186,16 +216,18 @@ class _ListDataKampusPageState extends State<ListDataKampusPage> {
 
 Widget _infoRow(IconData icon, String text, Color color) {
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),
+    padding: const EdgeInsets.symmetric(vertical: 4),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: Icon(icon, size: 18, color: color),
+        Icon(icon, size: 20, color: color),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: GoogleFonts.poppins(fontSize: 14, color: Colors.black87),
+          ),
         ),
-        const SizedBox(width: 6),
-        Expanded(child: Text(text)),
       ],
     ),
   );
